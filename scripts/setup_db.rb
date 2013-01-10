@@ -1,27 +1,20 @@
 require "mechanize"
-
-# TODO: prompt for this information
-blog_opts = {
-  :base_uri => 'http://localhost:4567/',
-  :admin_title => 'Test Blog',
-  :admin_user => 'admin',
-  :admin_email =>'test@testing-shit.com',
-  :admin_password => 'passpass'
-}
+require "highline/import"
 
 puts "#{Time.now} Installing Wordpress Database..."
 
+site_uri = ask("URL?  ") { |q| q.default = "http://localhost:4567/" }
+
 mech = Mechanize.new
-mech.get("#{ blog_opts[:base_uri] }wp-admin/install.php") do |page|
+mech.get("#{ site_uri }wp-admin/install.php") do |page|
   signup = page.form_with(:action => 'install.php?step=2') do |f|
-    f.weblog_title = blog_opts[:weblog_title]
-    f.user_name = blog_opts[:admin_user]
-    f.admin_password = blog_opts[:admin_password]
-    f.admin_password2 = blog_opts[:admin_password]
-    f.admin_email = blog_opts[:admin_email]
+    f.weblog_title = ask("Site Title?  ") { |q| q.default = "Awesome xCross" }
+    f.user_name = ask("Username? ") { |q| q.default = "admin" }
+    f.admin_password = ask("Password? ") { |q| q.default = "passpass" }
+    f.admin_password2 = ask("Password Confirm? ") { |q| q.default = "passpass" }
+    f.admin_email = ask("Email? ") { |q| q.default = "test@heyyoukid.com" }
   end.click_button
 end
-
 
 puts "#{Time.now} Installing Plugins..."
 
