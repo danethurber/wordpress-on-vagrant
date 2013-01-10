@@ -13,3 +13,10 @@ bundle install
 vagrant up
 open http://localhost:4567
 ```
+
+if you want test data
+---------------------
+
+```
+ruby scripts/setup_db.rb
+```
