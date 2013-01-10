@@ -29,7 +29,7 @@ Vagrant::Config.run do |config|
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
-  # config.vm.share_folder "themes", "/vagrant/themes", "./themes"
+  config.vm.share_folder "themes", "/vagrant/themes", "./themes"
 
   # Enable provisioning with chef solo
   config.vm.provision :chef_solo do |chef|
@@ -41,5 +41,17 @@ Vagrant::Config.run do |config|
 
     # set roles
     # chef.add_role "web"
+
+    # You may also specify custom JSON attributes:
+    chef.json.merge!({
+      :mysql => {
+        :server_debian_password => "hellokitty",
+        :server_root_password => "hellokitty",
+        :server_repl_password => "hellokitty"
+      },
+      :wordpress => {
+        :version => 'latest'
+      }
+    })
   end
 end
